@@ -84,10 +84,10 @@ var update = function (modifier) {
         hero.y += hero.speed * modifier;
     }
     if (37 in keysDown) { // Player holding left
-        hero.x -= 5; //hero.speed * modifier;
+        hero.x -= hero.speed * modifier;
     }
     if (39 in keysDown) { // Player holding right
-        hero.x += 10; //hero.speed * modifier;
+        hero.x += hero.speed * modifier;
     }
 
     // Are they touching?
