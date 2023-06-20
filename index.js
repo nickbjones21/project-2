@@ -21,8 +21,8 @@ let chessBoard = [
 
 //sound effects
 var soundEfx;
-var soundGameOver = "sounds/game-over-sound.mp3"; //game over sound
-var soundGameWin = "sounds/game-win-sound.mp3"; //game win sound
+var soundGameOver = "sounds/game-over-sound.wav"; //game over sound
+var soundGameWin = "sounds/game-win-sound.wav"; //game win sound
 //assign audio to sound FX
 soundEfx = document.getElementById("soundEfx");
 
