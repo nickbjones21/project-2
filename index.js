@@ -1,8 +1,8 @@
 //create the canvas
 var canvas = document.createElement("canvas");
 var ctx = canvas.getContext("2d");
-canvas.width = 900; //make 1000
-canvas.height = 900; //make 1000
+canvas.width = 1000; //make 1000
+canvas.height = 1000; //make 1000
 document.body.appendChild(canvas);
 
 
@@ -31,6 +31,31 @@ monsterImage.onload = function () {
     monsterReady = true;
 };
 monsterImage.src = "images/kraken_idle_1.png";
+
+//border side image
+var borderSideReady = false;
+var borderSideImage = new Image();
+borderSideImage.onload = function () {
+    borderSideReady = true;
+};
+borderSideImage.src = "images/border-side.png";
+
+//border bottom image
+var borderBottomReady = false;
+var borderBottomImage = new Image();
+borderBottomImage.onload = function () {
+    borderBottomReady = true;
+};
+borderBottomImage.src = "images/border-bottom.png";
+
+//score counter bg image
+var scorebgReady = false;
+var scorebgImage = new Image();
+scorebgImage.onload = function () {
+    scorebgReady = true;
+};
+scorebgImage.src = "images/score-scroll.png";
+
 //done with load images ==============================================
 
 
@@ -113,23 +138,32 @@ var update = function (modifier) {
 // Draw everything in the main render function
 var render = function () {
     if (bgReady) {
-        console.log('here2');
         ctx.drawImage(bgImage, 0, 0);
+    }
+    if (borderSideReady) {
+        ctx.drawImage(borderSideImage, 965, 0);
+        ctx.drawImage(borderSideImage, 0, 0);
+    }
+    if (borderBottomReady) {
+        ctx.drawImage(borderBottomImage, 0, 958);
+        ctx.drawImage(borderBottomImage, 0, 0);
+    }
+    if (scorebgReady) {
+        ctx.drawImage(scorebgImage, 0, 0);
     }
     if (heroReady) {
         ctx.drawImage(heroImage, hero.x, hero.y);
     }
-
     if (monsterReady) {
         ctx.drawImage(monsterImage, monster.x, monster.y);
     }
 
     // Score
-    ctx.fillStyle = "rgb(250, 250, 250)";
-    ctx.font = "24px Helvetica";
+    ctx.fillStyle = "rgb(0, 0, 0)";
+    ctx.font = "18px Helvetica";
     ctx.textAlign = "left";
     ctx.textBaseline = "top";
-    ctx.fillText("Goblins caught: " + monstersCaught, 32, 32);
+    ctx.fillText("Sea Monsters Slain: " + monstersCaught, 100, 22);
 }
 
 
