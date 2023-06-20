@@ -5,6 +5,8 @@ canvas.width = 512;
 canvas.height = 480;
 document.body.appendChild(canvas);
 
+
+
 //load images ==============================================
 // Background image
 var bgReady = false;
@@ -32,6 +34,63 @@ monsterImage.src = "images/monster.png";
 //done with load images ==============================================
 
 
+//define objects and variables we need =================================
+// Game objects
+var hero = {
+    speed: 256, // movement in pixels per second
+    x: 0,  // where on the canvas are they?
+    y: 0  // where on the canvas are they?
+};
+var monster = {
+// for this version, the monster does not move, so just and x and y
+    x: 0,
+    y: 0
+};
+var monstersCaught = 0;
+//end define objects and variables we need =================================
+
+
+//keyboard control ==================================================
+// Handle keyboard controls
+var keysDown = {}; //object were we properties when keys go down
+                // and then delete them when the key goes up
+// so the object tells us if any key is down when that keycode
+// is down.  In our game loop, we will move the hero image if when
+// we go thru render, a key is down
+
+addEventListener("keydown", function (e) {
+    //console.log(e.keyCode + " down")
+    keysDown[e.keyCode] = true;
+}, false);
+
+addEventListener("keyup", function (e) {
+    //console.log(e.keyCode + " up")
+    delete keysDown[e.keyCode];
+}, false);
+
+//end keyboard control ==================================================
+
+
+//define functions ==============================================
+
+// Update game objects
+var update = function (modifier) {
+    if (38 in keysDown) { // Player holding up
+        hero.y -= hero.speed * modifier;
+    }
+    if (40 in keysDown) { // Player holding down
+        hero.y += hero.speed * modifier;
+    }
+    if (37 in keysDown) { // Player holding left
+        hero.x -= 5; //hero.speed * modifier;
+    }
+    if (39 in keysDown) { // Player holding right
+        hero.x += 10; //hero.speed * modifier;
+    }
+};
+
+
+
 // Draw everything in the main render function
 var render = function () {
     if (bgReady) {
@@ -46,18 +105,16 @@ var render = function () {
         ctx.drawImage(monsterImage, monster.x, monster.y);
     }
 
-
-
 }
-
-
-
-
 
 
 // The main game loop
 var main = function () {
+    var now = Date.now();
+    var delta = now - then;
+    update(delta / 1000);
     render();
+    then = now;
     // Request to do this again ASAP using the Canvas method,
 // it’s much like the JS timer function “setInterval, it will
 // call the main method over and over again so our players 
@@ -71,18 +128,23 @@ var reset = function () {
     hero.x = (canvas.width / 2) -16;
     hero.y = (canvas.height / 2) - 16;
 
-//Place the monster somewhere on the screen randomly
-// but not in the hedges, Article in wrong, the 64 needs to be 
-// hedge 32 + hedge 32 + char 32 = 96
-    monster.x = 32 + (Math.random() * (canvas.width - 64));
-    monster.y = 32 + (Math.random() * (canvas.height - 64));
+    //Place the monster somewhere on the screen randomly
+    // but not in the hedges, Article in wrong, the 64 needs to be 
+    // hedge 32 + hedge 32 + char 32 = 96
+    monster.x = 32 + (Math.random() * (canvas.width - 96));
+    monster.y = 32 + (Math.random() * (canvas.height - 96));
 };
+
+//end of define functions ========================================
+
+
+
 
 
 
 
 // Let's play this game!
 var then = Date.now();
-//reset();
+reset();
 main();  // call the main game loop.
 
