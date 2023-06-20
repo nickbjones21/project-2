@@ -23,6 +23,7 @@ let chessBoard = [
 var soundEfx;
 var soundGameOver = "sounds/game-over-sound.wav"; //game over sound
 var soundGameWin = "sounds/game-win-sound.wav"; //game win sound
+var soundMonsterCaught = "sound/game-catch-sound.wav"; //monster catch sound
 //assign audio to sound FX
 soundEfx = document.getElementById("soundEfx");
 
@@ -311,6 +312,8 @@ var update = function (modifier) {
         && monster.y <= (hero.y + 60)
     ) {
         ++monstersCaught;       // keep track of our “score”
+        soundEfx.src = soundMonsterCaught;
+        soundEfx.play();
         reset();       // start a new cycle
     }
     
