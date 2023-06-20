@@ -212,7 +212,7 @@ var reset = function () {
         placeItem(wp3);
 
         if (monstersCaught === 5) {
-            alert("Congradulations captain, you've won!");
+            alert("Congratulations captain, you've won!");
             //change sound effect and play it
             soundEfx.src = soundGameWin;
             soundEfx.play();
