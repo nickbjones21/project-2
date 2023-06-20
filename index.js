@@ -5,6 +5,26 @@ canvas.width = 1000; //make 1000
 canvas.height = 1000; //make 1000
 document.body.appendChild(canvas);
 
+//chessboard
+let chessBoard = [
+    ['x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x'],
+    ['x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x'],
+    ['x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x'],
+    ['x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x'],
+    ['x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x'],
+    ['x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x'],
+    ['x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x'],
+    ['x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x'],
+    ['x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x'],
+]
+
+
+//sound effects
+var soundEfx;
+var soundGameOver = "sounds/game-over-sound.mp3"; //game over sound
+var soundGameWin = "sounds/game-win-sound.mp3"; //game win sound
+//assign audio to sound FX
+soundEfx = document.getElementById("soundEfx");
 
 
 //load images ==============================================
@@ -93,6 +113,7 @@ var wp3 = {
     y: 300
 }
 var monstersCaught = 0;
+var isGameOver = false;
 //end define objects and variables we need =================================
 
 
@@ -118,6 +139,122 @@ addEventListener("keyup", function (e) {
 
 
 //define functions ==============================================
+
+
+
+
+
+// Draw everything in the main render function
+var render = function () {
+    if (bgReady) {
+        ctx.drawImage(bgImage, 0, 0);
+    }
+    if (borderSideReady) {
+        ctx.drawImage(borderSideImage, 965, 0);
+        ctx.drawImage(borderSideImage, 0, 0);
+    }
+    if (borderBottomReady) {
+        ctx.drawImage(borderBottomImage, 0, 958);
+        ctx.drawImage(borderBottomImage, 0, 0);
+    }
+    if (whirlpoolReady) {
+        ctx.drawImage(whirlpoolImage, wp1.x, wp1.y);
+        ctx.drawImage(whirlpoolImage, wp2.x, wp2.y);
+        ctx.drawImage(whirlpoolImage, wp3.x, wp3.y);
+    }
+    if (scorebgReady) {
+        ctx.drawImage(scorebgImage, 0, 0);
+    }
+    
+    if (heroReady) {
+        ctx.drawImage(heroImage, hero.x, hero.y);
+    }
+    if (monsterReady) {
+        ctx.drawImage(monsterImage, monster.x, monster.y);
+    }
+
+    // Score
+    ctx.fillStyle = "rgb(0, 0, 0)";
+    ctx.font = "18px Helvetica";
+    ctx.textAlign = "left";
+    ctx.textBaseline = "top";
+    ctx.fillText("Sea Monsters Slain: " + monstersCaught, 100, 22);
+}
+
+
+// The main game loop
+var main = function () {
+    var now = Date.now();
+    var delta = now - then;
+    update(delta / 1000);
+    render();
+    then = now;
+    // Request to do this again ASAP using the Canvas method,
+// it’s much like the JS timer function “setInterval, it will
+// call the main method over and over again so our players 
+// can move and be re-drawn
+    requestAnimationFrame(main); 
+};
+
+
+// Reset the game when the player catches a monster
+var reset = function () {
+
+    if (isGameOver == true) {
+        soundEfx.src = soundGameOver;
+        soundEfx.play();
+    }
+    else {
+        placeItem(hero);
+        placeItem(monster);
+        placeItem(wp1);
+        placeItem(wp2);
+        placeItem(wp3);
+
+        if (monstersCaught === 5) {
+            alert("Congradulations captain, you've won!");
+            //change sound effect and play it
+            soundEfx.src = soundGameWin;
+            soundEfx.play();
+    
+        }
+    }
+};
+
+let placeItem = function (character) {
+    let x = 5;
+    let y = 6;
+    let success = false;
+    while(!success){
+        x = Math.floor(Math.random() * 9); //width of our array, will return 0-8
+        y = Math.floor(Math.random() * 9); //height of our array, will return 0-8
+                if (chessBoard[x][y] === 'x'){
+                    success = true;
+                }
+    }
+    chessBoard[x][y] = 'o'; //marks a "square" within the array is taken
+    character.x = (x*100) + 32; //allow space for border.
+    character.y = (y*100) + 32; //allow space for border
+}
+
+
+
+
+
+
+    // hero.x = (canvas.width / 2) -16;
+    // hero.y = (canvas.height / 2) - 16;
+
+    // //Place the monster somewhere on the screen randomly
+    // // but not in the hedges, Article in wrong, the 64 needs to be 
+    // // hedge 32 + hedge 32 + char 32 = 96
+    // monster.x = 40 + (Math.random() * (canvas.width - 96));
+    // monster.y = 60 + (Math.random() * (canvas.height - 225));
+
+
+//end of define functions ========================================
+
+
 
 // Update game objects 
 var update = function (modifier) {
@@ -181,77 +318,6 @@ var update = function (modifier) {
     
 
 };
-
-
-
-// Draw everything in the main render function
-var render = function () {
-    if (bgReady) {
-        ctx.drawImage(bgImage, 0, 0);
-    }
-    if (borderSideReady) {
-        ctx.drawImage(borderSideImage, 965, 0);
-        ctx.drawImage(borderSideImage, 0, 0);
-    }
-    if (borderBottomReady) {
-        ctx.drawImage(borderBottomImage, 0, 958);
-        ctx.drawImage(borderBottomImage, 0, 0);
-    }
-    if (whirlpoolReady) {
-        ctx.drawImage(whirlpoolImage, wp1.x, wp1.y);
-        ctx.drawImage(whirlpoolImage, wp2.x, wp2.y);
-        ctx.drawImage(whirlpoolImage, wp3.x, wp3.y);
-    }
-    if (scorebgReady) {
-        ctx.drawImage(scorebgImage, 0, 0);
-    }
-    
-    if (heroReady) {
-        ctx.drawImage(heroImage, hero.x, hero.y);
-    }
-    if (monsterReady) {
-        ctx.drawImage(monsterImage, monster.x, monster.y);
-    }
-
-    // Score
-    ctx.fillStyle = "rgb(0, 0, 0)";
-    ctx.font = "18px Helvetica";
-    ctx.textAlign = "left";
-    ctx.textBaseline = "top";
-    ctx.fillText("Sea Monsters Slain: " + monstersCaught, 100, 22);
-}
-
-
-// The main game loop
-var main = function () {
-    var now = Date.now();
-    var delta = now - then;
-    update(delta / 1000);
-    render();
-    then = now;
-    // Request to do this again ASAP using the Canvas method,
-// it’s much like the JS timer function “setInterval, it will
-// call the main method over and over again so our players 
-// can move and be re-drawn
-    requestAnimationFrame(main); 
-};
-
-
-// Reset the game when the player catches a monster
-var reset = function () {
-    hero.x = (canvas.width / 2) -16;
-    hero.y = (canvas.height / 2) - 16;
-
-    //Place the monster somewhere on the screen randomly
-    // but not in the hedges, Article in wrong, the 64 needs to be 
-    // hedge 32 + hedge 32 + char 32 = 96
-    monster.x = 40 + (Math.random() * (canvas.width - 96));
-    monster.y = 60 + (Math.random() * (canvas.height - 225));
-};
-
-//end of define functions ========================================
-
-
 
 
 
