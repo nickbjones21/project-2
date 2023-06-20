@@ -38,6 +38,16 @@ var render = function () {
         console.log('here2');
         ctx.drawImage(bgImage, 0, 0);
     }
+    if (heroReady) {
+        ctx.drawImage(heroImage, hero.x, hero.y);
+    }
+
+    if (monsterReady) {
+        ctx.drawImage(monsterImage, monster.x, monster.y);
+    }
+
+
+
 }
 
 
@@ -53,6 +63,19 @@ var main = function () {
 // call the main method over and over again so our players 
 // can move and be re-drawn
     requestAnimationFrame(main); 
+};
+
+
+// Reset the game when the player catches a monster
+var reset = function () {
+    hero.x = (canvas.width / 2) -16;
+    hero.y = (canvas.height / 2) - 16;
+
+//Place the monster somewhere on the screen randomly
+// but not in the hedges, Article in wrong, the 64 needs to be 
+// hedge 32 + hedge 32 + char 32 = 96
+    monster.x = 32 + (Math.random() * (canvas.width - 64));
+    monster.y = 32 + (Math.random() * (canvas.height - 64));
 };
 
 
