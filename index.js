@@ -76,6 +76,7 @@ addEventListener("keyup", function (e) {
 // Update game objects 
 var update = function (modifier) {
 
+    //adjust based on keys
     //check on keys
     if (38 in keysDown) { // Player holding up
         hero.y -= hero.speed * modifier;
@@ -100,6 +101,9 @@ var update = function (modifier) {
         ++monstersCaught;       // keep track of our “score”
         reset();       // start a new cycle
     }
+    
+    
+    
 
 };
 
@@ -119,6 +123,12 @@ var render = function () {
         ctx.drawImage(monsterImage, monster.x, monster.y);
     }
 
+    // Score
+    ctx.fillStyle = "rgb(250, 250, 250)";
+    ctx.font = "24px Helvetica";
+    ctx.textAlign = "left";
+    ctx.textBaseline = "top";
+    ctx.fillText("Goblins caught: " + monstersCaught, 32, 32);
 }
 
 
