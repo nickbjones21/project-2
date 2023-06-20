@@ -56,6 +56,14 @@ scorebgImage.onload = function () {
 };
 scorebgImage.src = "images/score-scroll.png";
 
+//whirlpool image
+var whirlpoolReady = false;
+var whirlpoolImage = new Image();
+whirlpoolImage.onload = function () {
+    whirlpoolReady = true;
+};
+whirlpoolImage.src = "images/wp-1.png";
+
 //done with load images ==============================================
 
 
@@ -71,6 +79,19 @@ var monster = {
     x: 0,
     y: 0
 };
+//3 whirlpool enemies
+var wp1 = {
+    x: 100,
+    y: 400
+}
+var wp2 = {
+    x: 685,
+    y: 500
+}
+var wp3 = {
+    x: 60,
+    y: 300
+}
 var monstersCaught = 0;
 //end define objects and variables we need =================================
 
@@ -117,11 +138,39 @@ var update = function (modifier) {
     }
     
 
-    // Are they touching?
+
+   // Are they touching?
+
+   //whirlpools
+    if (
+        hero.x <= (wp1.x + 40)
+        && wp1.x <= (hero.x + 40)
+        && hero.y <= (wp1.y + 40)
+        && wp1.y <= (hero.y + 40)
+    ) {
+        alert("Game over, avoid the whirlpools to prevent them from sinking your ship!");
+    } else if (
+        hero.x <= (wp2.x + 40)
+        && wp2.x <= (hero.x + 40)
+        && hero.y <= (wp2.y + 40)
+        && wp2.y <= (hero.y + 40)
+    ){
+        alert("Game over, avoid the whirlpools to prevent them from sinking your ship!");
+    } else if (
+        hero.x <= (wp3.x + 40)
+        && wp3.x <= (hero.x + 40)
+        && hero.y <= (wp3.y + 40)
+        && wp3.y <= (hero.y + 40)
+    ){
+        alert("Game over, avoid the whirlpools to prevent them from sinking your ship!");
+    }
+
+
+    //monsters
     if (
         hero.x <= (monster.x + 40)
         && monster.x <= (hero.x + 40)
-        && hero.y <= (monster.y + 60)
+        && hero.y <= (monster.y + 80)
         && monster.y <= (hero.y + 60)
     ) {
         ++monstersCaught;       // keep track of our “score”
@@ -148,9 +197,15 @@ var render = function () {
         ctx.drawImage(borderBottomImage, 0, 958);
         ctx.drawImage(borderBottomImage, 0, 0);
     }
+    if (whirlpoolReady) {
+        ctx.drawImage(whirlpoolImage, wp1.x, wp1.y);
+        ctx.drawImage(whirlpoolImage, wp2.x, wp2.y);
+        ctx.drawImage(whirlpoolImage, wp3.x, wp3.y);
+    }
     if (scorebgReady) {
         ctx.drawImage(scorebgImage, 0, 0);
     }
+    
     if (heroReady) {
         ctx.drawImage(heroImage, hero.x, hero.y);
     }
@@ -190,8 +245,8 @@ var reset = function () {
     //Place the monster somewhere on the screen randomly
     // but not in the hedges, Article in wrong, the 64 needs to be 
     // hedge 32 + hedge 32 + char 32 = 96
-    monster.x = 32 + (Math.random() * (canvas.width - 96));
-    monster.y = 32 + (Math.random() * (canvas.height - 500));
+    monster.x = 40 + (Math.random() * (canvas.width - 96));
+    monster.y = 60 + (Math.random() * (canvas.height - 225));
 };
 
 //end of define functions ========================================
