@@ -261,10 +261,10 @@ var update = function (modifier) {
 
     //adjust based on keys
     //check on keys
-    if (38 in keysDown && hero.y > 32 + 120) { //  holding up key
+    if (38 in keysDown && hero.y > 32 + 0) { //  holding up key
         hero.y -= hero.speed * modifier;
     }
-    if (40 in keysDown && hero.y < canvas.height - (64 + 75)) { //  holding down key
+    if (40 in keysDown && hero.y < canvas.height - (64 + 0)) { //  holding down key
         hero.y += hero.speed * modifier;
     }
     if (37 in keysDown && hero.x > (32 + 0)) { // holding left key
