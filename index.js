@@ -103,10 +103,10 @@ var update = function (modifier) {
 
     //adjust based on keys
     //check on keys
-    if (38 in keysDown && hero.y > 32 + 0) { //  holding up key
+    if (38 in keysDown && hero.y > 32 + 120) { //  holding up key
         hero.y -= hero.speed * modifier;
     }
-    if (40 in keysDown && hero.y < canvas.height - (64 + 0)) { //  holding down key
+    if (40 in keysDown && hero.y < canvas.height - (64 + 75)) { //  holding down key
         hero.y += hero.speed * modifier;
     }
     if (37 in keysDown && hero.x > (32 + 0)) { // holding left key
@@ -119,10 +119,10 @@ var update = function (modifier) {
 
     // Are they touching?
     if (
-        hero.x <= (monster.x + 32)
-        && monster.x <= (hero.x + 32)
-        && hero.y <= (monster.y + 32)
-        && monster.y <= (hero.y + 32)
+        hero.x <= (monster.x + 40)
+        && monster.x <= (hero.x + 40)
+        && hero.y <= (monster.y + 60)
+        && monster.y <= (hero.y + 60)
     ) {
         ++monstersCaught;       // keep track of our “score”
         reset();       // start a new cycle
@@ -191,7 +191,7 @@ var reset = function () {
     // but not in the hedges, Article in wrong, the 64 needs to be 
     // hedge 32 + hedge 32 + char 32 = 96
     monster.x = 32 + (Math.random() * (canvas.width - 96));
-    monster.y = 32 + (Math.random() * (canvas.height - 96));
+    monster.y = 32 + (Math.random() * (canvas.height - 500));
 };
 
 //end of define functions ========================================
