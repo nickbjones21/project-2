@@ -73,8 +73,10 @@ addEventListener("keyup", function (e) {
 
 //define functions ==============================================
 
-// Update game objects
+// Update game objects 
 var update = function (modifier) {
+
+    //check on keys
     if (38 in keysDown) { // Player holding up
         hero.y -= hero.speed * modifier;
     }
@@ -87,6 +89,18 @@ var update = function (modifier) {
     if (39 in keysDown) { // Player holding right
         hero.x += 10; //hero.speed * modifier;
     }
+
+    // Are they touching?
+    if (
+        hero.x <= (monster.x + 32)
+        && monster.x <= (hero.x + 32)
+        && hero.y <= (monster.y + 32)
+        && monster.y <= (hero.y + 32)
+    ) {
+        ++monstersCaught;       // keep track of our “score”
+        reset();       // start a new cycle
+    }
+
 };
 
 
