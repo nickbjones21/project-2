@@ -30,7 +30,7 @@ var monsterImage = new Image();
 monsterImage.onload = function () {
     monsterReady = true;
 };
-monsterImage.src = "images/monster.png";
+monsterImage.src = "images/kraken_idle_1.png";
 //done with load images ==============================================
 
 
