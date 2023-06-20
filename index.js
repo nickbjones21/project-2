@@ -42,7 +42,7 @@ var heroImage = new Image();
 heroImage.onload = function () {
     heroReady = true;
 };
-heroImage.src = "images/boatsprite-down.png";
+heroImage.src = "images/boatsprite-down.png"; //need to change this so that the boat sprite changes depending on direction
 
 // Monster image
 var monsterReady = false;
