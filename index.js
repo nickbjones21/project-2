@@ -78,18 +78,19 @@ var update = function (modifier) {
 
     //adjust based on keys
     //check on keys
-    if (38 in keysDown) { // Player holding up
+    if (38 in keysDown && hero.y > 32 + 0) { //  holding up key
         hero.y -= hero.speed * modifier;
     }
-    if (40 in keysDown) { // Player holding down
+    if (40 in keysDown && hero.y < canvas.height - (64 + 0)) { //  holding down key
         hero.y += hero.speed * modifier;
     }
-    if (37 in keysDown) { // Player holding left
+    if (37 in keysDown && hero.x > (32 + 0)) { // holding left key
         hero.x -= hero.speed * modifier;
     }
-    if (39 in keysDown) { // Player holding right
+    if (39 in keysDown && hero.x < canvas.width - (64 + 0)) { // holding right key
         hero.x += hero.speed * modifier;
     }
+    
 
     // Are they touching?
     if (
