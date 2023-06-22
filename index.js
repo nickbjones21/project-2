@@ -7,26 +7,6 @@ console.log(ctx);
 
 document.body.appendChild(canvas);
 
-const SPRITE_WIDTH = 64;
-const SPRITE_HEIGHT = 64;
-const BORDER_WIDTH = 1;
-const SPACING_WIDTH = 1;
-
-function spritePositionToImagePosition(row, col) {
-    return {
-        x: (
-            BORDER_WIDTH +
-            col * (SPACING_WIDTH + SPRITE_WIDTH)
-        ),
-        y: (
-            BORDER_WIDTH +
-            row * (SPACING_WIDTH + SPRITE_HEIGHT)
-        )
-    }
-}
-
-var position = spritePositionToImagePosition(1, 0);
-
 //chessboard
 let chessBoard = [
     ['x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x'],
@@ -107,6 +87,14 @@ whirlpoolImage.onload = function () {
 };
 whirlpoolImage.src = "images/wp-1.png";
 
+//rock (impassable obstacle)
+var rockReady = false;
+var rockImage = new Image();
+rockImage.onload = function () {
+    rockReady = true;
+};
+rockImage.src = "images/rock-obstacle.png";
+
 //done with load images ==============================================
 
 
@@ -119,8 +107,17 @@ var hero = {
 };
 var monster = {
 // for this version, the monster does not move, so just and x and y
-    x: 0,
-    y: 0
+    
+
+x: 512,
+y: 320,
+spriteX: 0,
+spriteY: 0,
+spriteWidth: 64,
+spriteHeight: 64,
+frameCount: 7,
+currentFrame: 0,
+frameSpeed: 1
 };
 //3 whirlpool enemies
 var wp1 = {
@@ -135,8 +132,19 @@ var wp3 = {
     x: 60,
     y: 300
 }
+
+var rock = {
+    x: 180,
+    y: 620
+}
 var monstersCaught = 0;
 var isGameOver = false;
+
+
+
+
+
+
 //end define objects and variables we need =================================
 
 
@@ -164,6 +172,38 @@ addEventListener("keyup", function (e) {
 //define functions ==============================================
 
 
+// Update the sprite position based on the current frame
+function updateSpritePosition() {
+    if (monster.frameSpeed > 0) {
+      monster.spriteX = monster.currentFrame * monster.spriteWidth + monster.spriteWidth;
+    } else {
+      monster.spriteX = monster.currentFrame * monster.spriteWidth;
+    }
+  }
+
+  // Draw the current frame of the spritesheet
+function drawSprite() {
+    ctx.drawImage(
+      monsterImage,
+      monster.spriteX,
+      monster.spriteY,
+      monster.spriteWidth,
+      monster.spriteHeight,
+      monster.x,
+      monster.y,
+      monster.spriteWidth,
+      monster.spriteHeight
+    );
+  }
+
+  // Update the animation frame
+function updateAnimationFrame() {
+    monster.currentFrame += monster.frameSpeed;
+    if (monster.currentFrame >= monster.frameCount) {
+      monster.currentFrame = 0; // Reset to the first frame when reaching the end
+    }
+    updateSpritePosition();
+  }
 
 
 
@@ -193,8 +233,10 @@ var render = function () {
         ctx.drawImage(heroImage, hero.x, hero.y);
     }
     if (monsterReady) {
-        ctx.drawImage(monsterImage, position.x, position.y, SPRITE_WIDTH,
-            SPRITE_HEIGHT,);
+        updateAnimationFrame(); // Update the animation frame
+        drawSprite(); // Draw the current frame of the spritesheet
+
+        //ctx.drawImage(monsterImage, monster.x, monster.y);
         
     }
 
@@ -263,20 +305,6 @@ let placeItem = function (character) {
 }
 
 
-
-
-
-
-    // hero.x = (canvas.width / 2) -16;
-    // hero.y = (canvas.height / 2) - 16;
-
-    // //Place the monster somewhere on the screen randomly
-    // // but not in the hedges, Article in wrong, the 64 needs to be 
-    // // hedge 32 + hedge 32 + char 32 = 96
-    // monster.x = 40 + (Math.random() * (canvas.width - 96));
-    // monster.y = 60 + (Math.random() * (canvas.height - 225));
-
-
 //end of define functions ========================================
 
 
@@ -288,15 +316,19 @@ var update = function (modifier) {
     //check on keys
     if (38 in keysDown && hero.y > 32 + 0) { //  holding up key
         hero.y -= hero.speed * modifier;
+        heroImage.src ="images/boatsprite-up-notflashing.png";
     }
     if (40 in keysDown && hero.y < canvas.height - (64 + 0)) { //  holding down key
         hero.y += hero.speed * modifier;
+        heroImage.src ="images/boatsprite-down.png";
     }
     if (37 in keysDown && hero.x > (32 + 0)) { // holding left key
         hero.x -= hero.speed * modifier;
+        heroImage.src ="images/boatsprite-left.png";
     }
     if (39 in keysDown && hero.x < canvas.width - (64 + 0)) { // holding right key
         hero.x += hero.speed * modifier;
+        heroImage.src ="images/boatsprite-right.png";
     }
     
 
