@@ -94,7 +94,7 @@ rockImage.onload = function () {
 };
 rockImage.src = "images/rocks.png";
 
-//gameend screen
+//game end screen
 var gameendReady = false;
 var gameendImage = new Image();
 gameendImage.onload = function () {
@@ -139,11 +139,47 @@ var wp3 = {
     x: 60,
     y: 300
 }
+var wp4 = {
+    x: 685,
+    y: 400
+}
+var wp5 = {
+    x: 60,
+    y: 500
+}
+var wp6 = {
+    x: 685,
+    y: 500
+}
+var wp7 = {
+    x: 60,
+    y: 600
+}
 
+
+//rocks
 var rock = {
     x: 180,
     y: 630
 }
+var rock2 = {
+    x: 250,
+    y: 630
+}
+var rock3 = {
+    x: 320,
+    y: 630
+}
+var rock4 = {
+    x: 400,
+    y: 630
+}
+var rock5 = {
+    x: 480,
+    y: 630
+}
+
+
 var targetsCaught = 0;
 var isGameOver = false;
 
@@ -231,10 +267,18 @@ var render = function () {
         ctx.drawImage(whirlpoolImage, wp1.x, wp1.y);
         ctx.drawImage(whirlpoolImage, wp2.x, wp2.y);
         ctx.drawImage(whirlpoolImage, wp3.x, wp3.y);
+        ctx.drawImage(whirlpoolImage, wp4.x, wp4.y);
+        ctx.drawImage(whirlpoolImage, wp5.x, wp5.y);
+        ctx.drawImage(whirlpoolImage, wp6.x, wp6.y);
+        ctx.drawImage(whirlpoolImage, wp7.x, wp7.y);
     }
  
     if (rockReady) {
         ctx.drawImage(rockImage, rock.x, rock.y);
+        ctx.drawImage(rockImage, rock2.x, rock2.y);
+        ctx.drawImage(rockImage, rock3.x, rock3.y);
+        ctx.drawImage(rockImage, rock4.x, rock4.y);
+        ctx.drawImage(rockImage, rock5.x, rock5.y);
     }
     if (heroReady) {
         ctx.drawImage(heroImage, hero.x, hero.y);
@@ -298,7 +342,16 @@ var reset = function () {
         placeItem(wp1);
         placeItem(wp2);
         placeItem(wp3);
+        placeItem(wp4);
+        placeItem(wp5);
+        placeItem(wp6);
+        placeItem(wp7);
         placeItem(rock);
+        placeItem(rock2);
+        placeItem(rock3);
+        placeItem(rock4);
+        placeItem(rock5);
+
 
         if (targetsCaught === 5) {
             alert("Congratulations captain, you've won!");
@@ -366,22 +419,36 @@ var update = function (modifier) {
         && wp1.x <= (hero.x + 30)
         && hero.y <= (wp1.y + 30)
         && wp1.y <= (hero.y + 30)
-    ) {
-        alert("Game over, avoid the whirlpools to prevent them from sinking your ship!");
-        isGameOver = true;
-    } else if (
+        ||
         hero.x <= (wp2.x + 30)
         && wp2.x <= (hero.x + 30)
         && hero.y <= (wp2.y + 30)
         && wp2.y <= (hero.y + 30)
-    ){
-        alert("Game over, avoid the whirlpools to prevent them from sinking your ship!");
-        isGameOver = true;
-    } else if (
+        ||
         hero.x <= (wp3.x + 30)
         && wp3.x <= (hero.x + 30)
         && hero.y <= (wp3.y + 30)
         && wp3.y <= (hero.y + 30)
+        ||
+        hero.x <= (wp4.x + 30)
+        && wp4.x <= (hero.x + 30)
+        && hero.y <= (wp4.y + 30)
+        && wp4.y <= (hero.y + 30)
+        ||
+        hero.x <= (wp5.x + 30)
+        && wp5.x <= (hero.x + 30)
+        && hero.y <= (wp5.y + 30)
+        && wp5.y <= (hero.y + 30)
+        ||
+        hero.x <= (wp6.x + 30)
+        && wp6.x <= (hero.x + 30)
+        && hero.y <= (wp6.y + 30)
+        && wp6.y <= (hero.y + 30)
+        ||
+        hero.x <= (wp7.x + 30)
+        && wp7.x <= (hero.x + 30)
+        && hero.y <= (wp7.y + 30)
+        && wp7.y <= (hero.y + 30)
     ){
         alert("Game over, avoid the whirlpools to prevent them from sinking your ship!");
         isGameOver = true;
@@ -410,6 +477,26 @@ var update = function (modifier) {
         rock.x <= (hero.x + 60) &&
         hero.y <= (rock.y + 30) &&
         rock.y <= (hero.y + 60)
+        ||
+        hero.x <= (rock2.x + 40) &&
+        rock2.x <= (hero.x + 60) &&
+        hero.y <= (rock2.y + 30) &&
+        rock2.y <= (hero.y + 60)
+        ||
+        hero.x <= (rock3.x + 40) &&
+        rock3.x <= (hero.x + 60) &&
+        hero.y <= (rock3.y + 30) &&
+        rock3.y <= (hero.y + 60)
+        ||
+        hero.x <= (rock4.x + 40) &&
+        rock4.x <= (hero.x + 60) &&
+        hero.y <= (rock4.y + 30) &&
+        rock4.y <= (hero.y + 60)
+        ||
+        hero.x <= (rock5.x + 40) &&
+        rock5.x <= (hero.x + 60) &&
+        hero.y <= (rock5.y + 30) &&
+        rock5.y <= (hero.y + 60)
     ) {
         // Collision with rock, prevent movement
         if (38 in keysDown && hero.y > 32 + 0) { // holding up key
