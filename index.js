@@ -22,7 +22,6 @@ let chessBoard = [
 
 
 //sound effects
-var soundEfx;
 var soundGameOver = new Audio("sounds/game-over-sound.wav"); //game over sound
 var soundGameWin = new Audio("sounds/game-win-sound.wav"); //game win sound
 var soundtargetCaught = new Audio("sounds/game-catch-sound.wav"); //target catch sound
