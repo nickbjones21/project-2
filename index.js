@@ -1,9 +1,31 @@
 //create the canvas
 var canvas = document.createElement("canvas");
 var ctx = canvas.getContext("2d");
-canvas.width = 1000; //make 1000
-canvas.height = 1000; //make 1000
+canvas.width = 1000; //make canvas w 1000
+canvas.height = 1000; //make canvas h 1000
+console.log(ctx);
+
 document.body.appendChild(canvas);
+
+const SPRITE_WIDTH = 64;
+const SPRITE_HEIGHT = 64;
+const BORDER_WIDTH = 1;
+const SPACING_WIDTH = 1;
+
+function spritePositionToImagePosition(row, col) {
+    return {
+        x: (
+            BORDER_WIDTH +
+            col * (SPACING_WIDTH + SPRITE_WIDTH)
+        ),
+        y: (
+            BORDER_WIDTH +
+            row * (SPACING_WIDTH + SPRITE_HEIGHT)
+        )
+    }
+}
+
+var position = spritePositionToImagePosition(1, 0);
 
 //chessboard
 let chessBoard = [
@@ -51,7 +73,7 @@ var monsterImage = new Image();
 monsterImage.onload = function () {
     monsterReady = true;
 };
-monsterImage.src = "images/kraken_idle_1.png";
+monsterImage.src = "images/spritesheets/kraken-spritesheet.png";
 
 //border side image
 var borderSideReady = false;
@@ -166,12 +188,14 @@ var render = function () {
     if (scorebgReady) {
         ctx.drawImage(scorebgImage, 0, 0);
     }
-    
+
     if (heroReady) {
         ctx.drawImage(heroImage, hero.x, hero.y);
     }
     if (monsterReady) {
-        ctx.drawImage(monsterImage, monster.x, monster.y);
+        ctx.drawImage(monsterImage, position.x, position.y, SPRITE_WIDTH,
+            SPRITE_HEIGHT,);
+        
     }
 
     // Score
