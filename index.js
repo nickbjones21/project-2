@@ -23,9 +23,9 @@ let chessBoard = [
 
 //sound effects
 var soundEfx;
-var soundGameOver = "sounds/game-over-sound.wav"; //game over sound
-var soundGameWin = "sounds/game-win-sound.wav"; //game win sound
-var soundMonsterCaught = "sound/game-catch-sound.wav"; //monster catch sound
+var soundGameOver = new Audio("sounds/game-over-sound.wav"); //game over sound
+var soundGameWin = new Audio("sounds/game-win-sound.wav"); //game win sound
+var soundtargetCaught = new Audio("sounds/game-catch-sound.wav"); //target catch sound
 //assign audio to sound FX
 soundEfx = document.getElementById("soundEfx");
 
@@ -47,13 +47,13 @@ heroImage.onload = function () {
 };
 heroImage.src = "images/boatsprite-down.png"; //need to change this so that the boat sprite changes depending on direction
 
-// Monster image
-var monsterReady = false;
-var monsterImage = new Image();
-monsterImage.onload = function () {
-    monsterReady = true;
+// target image
+var targetReady = false;
+var targetImage = new Image();
+targetImage.onload = function () {
+    targetReady = true;
 };
-monsterImage.src = "images/spritesheets/kraken-spritesheet.png";
+targetImage.src = "images/spritesheets/kraken-spritesheet.png";
 
 //border side image
 var borderSideReady = false;
@@ -93,7 +93,7 @@ var rockImage = new Image();
 rockImage.onload = function () {
     rockReady = true;
 };
-rockImage.src = "images/rock-obstacle.png";
+rockImage.src = "images/rocks.png";
 
 //done with load images ==============================================
 
@@ -105,12 +105,12 @@ var hero = {
     x: 0,  // where on the canvas are they?
     y: 0  // where on the canvas are they?
 };
-var monster = {
-// for this version, the monster does not move, so just and x and y
+var target = {
+// for this version, the target does not move, so just and x and y
     
 
 x: 512,
-y: 320,
+y: 330,
 spriteX: 0,
 spriteY: 0,
 spriteWidth: 64,
@@ -135,9 +135,9 @@ var wp3 = {
 
 var rock = {
     x: 180,
-    y: 620
+    y: 630
 }
-var monstersCaught = 0;
+var targetsCaught = 0;
 var isGameOver = false;
 
 
@@ -174,33 +174,33 @@ addEventListener("keyup", function (e) {
 
 // Update the sprite position based on the current frame
 function updateSpritePosition() {
-    if (monster.frameSpeed > 0) {
-      monster.spriteX = monster.currentFrame * monster.spriteWidth + monster.spriteWidth;
+    if (target.frameSpeed > 0) {
+      target.spriteX = target.currentFrame * target.spriteWidth + target.spriteWidth;
     } else {
-      monster.spriteX = monster.currentFrame * monster.spriteWidth;
+      target.spriteX = target.currentFrame * target.spriteWidth;
     }
   }
 
   // Draw the current frame of the spritesheet
 function drawSprite() {
     ctx.drawImage(
-      monsterImage,
-      monster.spriteX,
-      monster.spriteY,
-      monster.spriteWidth,
-      monster.spriteHeight,
-      monster.x,
-      monster.y,
-      monster.spriteWidth,
-      monster.spriteHeight
+      targetImage,
+      target.spriteX,
+      target.spriteY,
+      target.spriteWidth,
+      target.spriteHeight,
+      target.x,
+      target.y,
+      target.spriteWidth,
+      target.spriteHeight
     );
   }
 
   // Update the animation frame
 function updateAnimationFrame() {
-    monster.currentFrame += monster.frameSpeed;
-    if (monster.currentFrame >= monster.frameCount) {
-      monster.currentFrame = 0; // Reset to the first frame when reaching the end
+    target.currentFrame += target.frameSpeed;
+    if (target.currentFrame >= target.frameCount) {
+      target.currentFrame = 0; // Reset to the first frame when reaching the end
     }
     updateSpritePosition();
   }
@@ -225,27 +225,30 @@ var render = function () {
         ctx.drawImage(whirlpoolImage, wp2.x, wp2.y);
         ctx.drawImage(whirlpoolImage, wp3.x, wp3.y);
     }
-    if (scorebgReady) {
-        ctx.drawImage(scorebgImage, 0, 0);
+ 
+    if (rockReady) {
+        ctx.drawImage(rockImage, rock.x, rock.y);
     }
-
     if (heroReady) {
         ctx.drawImage(heroImage, hero.x, hero.y);
     }
-    if (monsterReady) {
+    if (targetReady) {
         updateAnimationFrame(); // Update the animation frame
         drawSprite(); // Draw the current frame of the spritesheet
 
-        //ctx.drawImage(monsterImage, monster.x, monster.y);
-        
+        //ctx.drawImage(targetImage, target.x, target.y);
     }
+    if (scorebgReady) {
+        ctx.drawImage(scorebgImage, 0, 0);
+    }
+    
 
     // Score
     ctx.fillStyle = "rgb(0, 0, 0)";
     ctx.font = "18px Helvetica";
     ctx.textAlign = "left";
     ctx.textBaseline = "top";
-    ctx.fillText("Sea Monsters Slain: " + monstersCaught, 100, 22);
+    ctx.fillText("Sea targets Slain: " + targetsCaught, 100, 22);
 }
 
 
@@ -256,6 +259,10 @@ var main = function () {
     update(delta / 1000);
     render();
     then = now;
+
+    if (isGameOver || targetsCaught === 5) {
+        return;
+    }
     // Request to do this again ASAP using the Canvas method,
 // it’s much like the JS timer function “setInterval, it will
 // call the main method over and over again so our players 
@@ -264,25 +271,29 @@ var main = function () {
 };
 
 
-// Reset the game when the player catches a monster
+// Reset the game when the player catches a target
 var reset = function () {
 
+    
     if (isGameOver == true) {
-        soundEfx.src = soundGameOver;
-        soundEfx.play();
+        soundGameOver.play();
+        // soundEfx.src = soundGameOver;
+        // soundEfx.play();
     }
-    else {
+    else if (isGameOver == false) {
         placeItem(hero);
-        placeItem(monster);
+        placeItem(target);
         placeItem(wp1);
         placeItem(wp2);
         placeItem(wp3);
+        placeItem(rock);
 
-        if (monstersCaught === 5) {
+        if (targetsCaught === 5) {
             alert("Congratulations captain, you've won!");
+            soundGameWin.play();
             //change sound effect and play it
-            soundEfx.src = soundGameWin;
-            soundEfx.play();
+            // soundEfx.src = soundGameWin;
+            // soundEfx.play();
     
         }
     }
@@ -334,47 +345,72 @@ var update = function (modifier) {
 
 
    // Are they touching?
+   
+   //check collision with targets
 
    //whirlpools
     if (
-        hero.x <= (wp1.x + 40)
-        && wp1.x <= (hero.x + 40)
-        && hero.y <= (wp1.y + 40)
-        && wp1.y <= (hero.y + 40)
+        hero.x <= (wp1.x + 30)
+        && wp1.x <= (hero.x + 30)
+        && hero.y <= (wp1.y + 30)
+        && wp1.y <= (hero.y + 30)
     ) {
         alert("Game over, avoid the whirlpools to prevent them from sinking your ship!");
     } else if (
-        hero.x <= (wp2.x + 40)
-        && wp2.x <= (hero.x + 40)
-        && hero.y <= (wp2.y + 40)
-        && wp2.y <= (hero.y + 40)
+        hero.x <= (wp2.x + 30)
+        && wp2.x <= (hero.x + 30)
+        && hero.y <= (wp2.y + 30)
+        && wp2.y <= (hero.y + 30)
     ){
         alert("Game over, avoid the whirlpools to prevent them from sinking your ship!");
     } else if (
-        hero.x <= (wp3.x + 40)
-        && wp3.x <= (hero.x + 40)
-        && hero.y <= (wp3.y + 40)
-        && wp3.y <= (hero.y + 40)
+        hero.x <= (wp3.x + 30)
+        && wp3.x <= (hero.x + 30)
+        && hero.y <= (wp3.y + 30)
+        && wp3.y <= (hero.y + 30)
     ){
         alert("Game over, avoid the whirlpools to prevent them from sinking your ship!");
     }
 
 
-    //monsters
+    //targets
     if (
-        hero.x <= (monster.x + 40)
-        && monster.x <= (hero.x + 40)
-        && hero.y <= (monster.y + 80)
-        && monster.y <= (hero.y + 60)
+        hero.x <= (target.x + 40)
+        && target.x <= (hero.x + 60)
+        && hero.y <= (target.y + 80)
+        && target.y <= (hero.y + 60)
     ) {
-        ++monstersCaught;       // keep track of our “score”
-        soundEfx.src = soundMonsterCaught;
-        soundEfx.play();
+        ++targetsCaught;       // keep track of our “score”
+        soundtargetCaught.play();
+        // soundEfx.src = soundtargetCaught;
+        // soundEfx.play();
         reset();       // start a new cycle
     }
-    
-    
-    
+
+
+
+    //rock
+    if (
+        hero.x <= (rock.x + 40) &&
+        rock.x <= (hero.x + 60) &&
+        hero.y <= (rock.y + 30) &&
+        rock.y <= (hero.y + 60)
+    ) {
+        // Collision with rock, prevent movement
+        if (38 in keysDown && hero.y > 32 + 0) { // holding up key
+            hero.y += hero.speed * modifier;
+        }
+        if (40 in keysDown && hero.y < canvas.height - (64 + 0)) { // holding down key
+            hero.y -= hero.speed * modifier;
+        }
+        if (37 in keysDown && hero.x > (32 + 0)) { // holding left key
+            hero.x += hero.speed * modifier;
+        }
+        if (39 in keysDown && hero.x < canvas.width - (64 + 0)) { // holding right key
+            hero.x -= hero.speed * modifier;
+        }
+    }
+
 
 };
 
