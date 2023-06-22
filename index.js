@@ -94,6 +94,14 @@ rockImage.onload = function () {
 };
 rockImage.src = "images/rocks.png";
 
+//gameend screen
+var gameendReady = false;
+var gameendImage = new Image();
+gameendImage.onload = function () {
+    gameendReady = true;
+};
+gameendImage.src = "images/gameEndScreen.png";
+
 //done with load images ==============================================
 
 
@@ -240,6 +248,10 @@ var render = function () {
     if (scorebgReady) {
         ctx.drawImage(scorebgImage, 0, 0);
     }
+    if (isGameOver || targetsCaught === 5){
+        ctx.drawImage(gameendImage, 0, 0);
+                return;
+    }
     
 
     // Score
@@ -260,6 +272,7 @@ var main = function () {
     then = now;
 
     if (isGameOver || targetsCaught === 5) {
+        ctx.drawImage(gameendImage, 0, 0);
         return;
     }
     // Request to do this again ASAP using the Canvas method,
@@ -355,6 +368,7 @@ var update = function (modifier) {
         && wp1.y <= (hero.y + 30)
     ) {
         alert("Game over, avoid the whirlpools to prevent them from sinking your ship!");
+        isGameOver = true;
     } else if (
         hero.x <= (wp2.x + 30)
         && wp2.x <= (hero.x + 30)
@@ -362,6 +376,7 @@ var update = function (modifier) {
         && wp2.y <= (hero.y + 30)
     ){
         alert("Game over, avoid the whirlpools to prevent them from sinking your ship!");
+        isGameOver = true;
     } else if (
         hero.x <= (wp3.x + 30)
         && wp3.x <= (hero.x + 30)
@@ -369,6 +384,7 @@ var update = function (modifier) {
         && wp3.y <= (hero.y + 30)
     ){
         alert("Game over, avoid the whirlpools to prevent them from sinking your ship!");
+        isGameOver = true;
     }
 
 
