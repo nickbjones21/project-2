@@ -44,7 +44,7 @@ var heroImage = new Image();
 heroImage.onload = function () {
     heroReady = true;
 };
-heroImage.src = "images/boatsprite-down.png"; //need to change this so that the boat sprite changes depending on direction
+heroImage.src = "images/boatsprite-down.png"; 
 
 // target image
 var targetReady = false;
@@ -102,6 +102,7 @@ gameendImage.onload = function () {
 };
 gameendImage.src = "images/gameEndScreen.png";
 
+
 //done with load images ==============================================
 
 
@@ -109,11 +110,11 @@ gameendImage.src = "images/gameEndScreen.png";
 // Game objects
 var hero = {
     speed: 256, // movement in pixels per second
-    x: 0,  // where on the canvas are they?
-    y: 0  // where on the canvas are they?
+    x: 0, 
+    y: 0  
 };
 var target = {
-// for this version, the target does not move, so just and x and y
+
     
 
 x: 512,
@@ -126,7 +127,7 @@ frameCount: 7,
 currentFrame: 0,
 frameSpeed: 1
 };
-//3 whirlpool enemies
+//7 whirlpool enemies
 var wp1 = {
     x: 100,
     y: 400
@@ -157,7 +158,7 @@ var wp7 = {
 }
 
 
-//rocks
+//5 rock obstacles - the boat cannot move through them
 var rock = {
     x: 180,
     y: 630
@@ -224,7 +225,7 @@ function updateSpritePosition() {
     }
   }
 
-  // Draw the current frame of the spritesheet
+  // for Drawing the current frame of the spritesheet
 function drawSprite() {
     ctx.drawImage(
       targetImage,
@@ -243,12 +244,13 @@ function drawSprite() {
 function updateAnimationFrame() {
     target.currentFrame += target.frameSpeed;
     if (target.currentFrame >= target.frameCount) {
-      target.currentFrame = 0; // Reset to the first frame when reaching the end
+      target.currentFrame = 0; //Resetss to the first frame when reaching  end
     }
     updateSpritePosition();
   }
 
-
+var whirlpoolRotation = 0;
+var whirlpoolRotationSpeed = 0.02;
 
 // Draw everything in the main render function
 var render = function () {
@@ -284,8 +286,8 @@ var render = function () {
         ctx.drawImage(heroImage, hero.x, hero.y);
     }
     if (targetReady) {
-        updateAnimationFrame(); // Update the animation frame
-        drawSprite(); // Draw the current frame of the spritesheet
+        updateAnimationFrame(); // Update the ani frame
+        drawSprite(); //Drawing the current frame of the spritesheet
 
         //ctx.drawImage(targetImage, target.x, target.y);
     }
@@ -319,10 +321,7 @@ var main = function () {
         ctx.drawImage(gameendImage, 0, 0);
         return;
     }
-    // Request to do this again ASAP using the Canvas method,
-// it’s much like the JS timer function “setInterval, it will
-// call the main method over and over again so our players 
-// can move and be re-drawn
+
     requestAnimationFrame(main); 
 };
 
