@@ -249,11 +249,17 @@ function updateAnimationFrame() {
     updateSpritePosition();
   }
 
-var whirlpoolRotation = 0;
-var whirlpoolRotationSpeed = 0.02;
 
 // Draw everything in the main render function
 var render = function () {
+    if (isGameOver) {
+        ctx.drawImage(gameendImage, 0, 0);
+        return;
+    }
+    if(targetsCaught === 5) {
+        ctx.drawImage(gameendImage, 0, 0);
+        return;
+    }
     if (bgReady) {
         ctx.drawImage(bgImage, 0, 0);
     }
@@ -294,10 +300,7 @@ var render = function () {
     if (scorebgReady) {
         ctx.drawImage(scorebgImage, 0, 0);
     }
-    if (isGameOver || targetsCaught === 5){
-        ctx.drawImage(gameendImage, 0, 0);
-                return;
-    }
+
     
 
     // Score
@@ -321,8 +324,9 @@ var main = function () {
         ctx.drawImage(gameendImage, 0, 0);
         return;
     }
-
+if(!isGameOver){
     requestAnimationFrame(main); 
+}
 };
 
 
@@ -334,6 +338,14 @@ var reset = function () {
         soundGameOver.play();
         // soundEfx.src = soundGameOver;
         // soundEfx.play();
+    }else if (targetsCaught === 5) {
+        alert("Congratulations captain, you've won!");
+        soundGameWin.play();
+        return;
+        //change sound effect and play it
+        // soundEfx.src = soundGameWin;
+        // soundEfx.play();
+
     }
     else if (isGameOver == false) {
         placeItem(hero);
@@ -350,16 +362,7 @@ var reset = function () {
         placeItem(rock3);
         placeItem(rock4);
         placeItem(rock5);
-
-
-        if (targetsCaught === 5) {
-            alert("Congratulations captain, you've won!");
-            soundGameWin.play();
-            //change sound effect and play it
-            // soundEfx.src = soundGameWin;
-            // soundEfx.play();
-    
-        }
+  
     }
 };
 
